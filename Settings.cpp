@@ -1,7 +1,20 @@
 #include "stdafx.h"
 #include "Settings.h"
 
-// TODO: Documentation
+/*
+NAME
+	void MainMenuState::InitSettings()
+
+DESCRIPTION
+	This function will initialized the desired settings for the game. These
+	settings typically consist of audio, video resolution, and so on.
+
+AUTHOR
+	Austin Rafuls
+
+DATE
+	8:47am 8/5/2019
+*/
 void Settings::InitSettings()
 {
 	m_videoModes = sf::VideoMode::getFullscreenModes();

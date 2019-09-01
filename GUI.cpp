@@ -5,8 +5,12 @@
 gui::Button::Button(
 	float a_x, float a_y, int a_w, int a_h,
 	sf::Font * a_font, unsigned int a_charSize, std::string a_text,
-	sf::Color a_textInactiveColor, sf::Color a_textHoverColor, sf::Color a_textActiveColor,
-	sf::Color a_inactiveColor, sf::Color a_hoverColor, sf::Color a_activeColor,
+	sf::Color a_textInactiveColor, 
+	sf::Color a_textHoverColor, 
+	sf::Color a_textActiveColor,
+	sf::Color a_inactiveColor, 
+	sf::Color a_hoverColor, 
+	sf::Color a_activeColor,
 	sf::Color a_outlineInactiveColor,
 	sf::Color a_outlineHoverColor,
 	sf::Color a_outlineActiveColor,
@@ -283,7 +287,11 @@ void gui::Button::Render(sf::RenderTarget & a_target)
 }
 
 
+
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
 
 
 gui::DropDownList::DropDownList
@@ -496,6 +504,290 @@ void gui::DropDownList::Render(sf::RenderTarget & a_target)
 		for (auto &item : m_itemList)
 		{
 			item->Render(a_target);
+		}
+	}
+}
+
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+
+
+gui::TextureMenu::TextureMenu(
+	sf::Texture * a_textureSheet, 
+	float a_x, float a_y, 
+	float a_width, float a_height,
+	float a_gridScale,
+	sf::Font& a_font, std::string a_text
+) : m_timer(0.f), m_timerMax(2.f)
+{
+	m_gridScale = a_gridScale;
+	m_activeSelection = false;
+	m_hideMenu = false;
+
+	m_textureSheet.setPosition(a_x, a_y);
+	m_textureSheet.setTexture(*a_textureSheet);
+
+	m_border.setPosition(a_x, a_y);
+	m_border.setSize(sf::Vector2f(a_width, a_height));
+	m_border.setFillColor(sf::Color(50, 50, 50, 100));
+	m_border.setOutlineThickness(1.f);
+	m_border.setOutlineColor(sf::Color::Magenta);
+
+	// Prevent textures from going outside the bounds of our TextureMenu
+	if (m_textureSheet.getGlobalBounds().width > m_border.getGlobalBounds().width)
+	{
+		m_textureSheet.setTextureRect
+		(
+			sf::IntRect(
+				0,
+				0,
+				static_cast<int>(m_border.getGlobalBounds().width),
+				static_cast<int>(m_textureSheet.getGlobalBounds().height)
+			)
+		);
+	}
+
+	// Prevent textures from going outside the bounds of our TextureMenu
+	if (m_textureSheet.getGlobalBounds().height > m_border.getGlobalBounds().height)
+	{
+		m_textureSheet.setTextureRect
+		(
+			sf::IntRect(
+				0,
+				0,
+				static_cast<int>(m_textureSheet.getGlobalBounds().width),
+				static_cast<int>(m_border.getGlobalBounds().width)
+			)
+		);
+	}
+
+	m_selection.setPosition(a_x, a_y);
+	m_selection.setSize(sf::Vector2f(m_gridScale, m_gridScale));
+	m_selection.setFillColor(sf::Color::Transparent);
+	m_selection.setOutlineThickness(1.f);
+	m_selection.setOutlineColor(sf::Color::Blue);
+
+	m_textureRect.width = static_cast<int>(m_gridScale);
+	m_textureRect.height = static_cast<int>(m_gridScale);
+
+	// Button to toggle TextureMenu
+	int width = 80;
+	int height = 80;
+	m_hideButton = new gui::Button(
+		a_x - 100, a_y + 8, width, height,
+		&a_font, 26, a_text,
+		sf::Color::White, sf::Color::Yellow, sf::Color::Transparent,
+		sf::Color(80, 80, 80, 200), sf::Color(150, 150, 150, 255), sf::Color(30, 30, 30, 150));
+}
+
+
+
+gui::TextureMenu::~TextureMenu()
+{
+	delete m_hideButton;
+}
+
+
+/*
+NAME
+	const bool & gui::TextureMenu::IsActive() const
+
+DESCRIPTION
+	This function is a getter function to return the current status of the
+	m_activeSelection boolean. This value determines whether or not the user
+	is currently attempting to select a texture from the TextureMenu
+
+RETURNS
+	A boolean value representing the current state of m_activeSelection.
+
+AUTHOR
+	Austin Rafuls
+
+DATE
+	4:47pm 8/23/2019
+*/
+const bool & gui::TextureMenu::IsActive() const
+{
+	return m_activeSelection;
+}
+
+
+/*
+NAME
+	const sf::IntRect & gui::TextureMenu::GetTextureRect() const
+
+DESCRIPTION
+	This function is a getter function to return the current Integer Rectangle
+	being used for selecting a specific texture from the texture sheet.
+
+RETURNS
+	An IntRect & with the coordinates to the current texture in the texture 
+	sheet.
+
+AUTHOR
+	Austin Rafuls
+
+DATE
+	4:51pm 8/23/2019
+*/
+const sf::IntRect & gui::TextureMenu::GetTextureRect() const
+{
+	return m_textureRect;
+}
+
+
+/*
+NAME
+	const bool gui::TextureMenu::GetKeyTimer()
+
+DESCRIPTION
+	This is a simple accessor that will determine if the toggle button
+	interaction will be recognized depending on the key timers.
+
+RETURNS
+	Returns a boolean representing if the toggle button can be pressed.
+
+AUTHOR
+	Austin Rafuls
+
+DATE
+	5:45m 8/23/2019
+*/
+const bool gui::TextureMenu::GetKeyTimer()
+{
+	if (m_timer >= m_timerMax)
+	{
+		m_timer = 0.f;
+		return true;
+	}
+	return false;
+}
+
+
+/*
+NAME
+	void gui::TextureMenu::UpdateKeyTimer()
+
+SYNOPSIS
+	const float a_dt	- Delta time
+
+DESCRIPTION
+	This function will update the toggle button over time to prevent spamming.
+
+AUTHOR
+	Austin Rafuls
+
+DATE
+	5:43pm 8/23/2019
+*/
+void gui::TextureMenu::UpdateKeyTimer(const float & a_dt)
+{
+	if (m_timer < m_timerMax)
+	{
+		m_timer += 10.f * a_dt;
+	}
+}
+
+
+/*
+NAME
+	void gui::TextureMenu::Update()
+
+SYNOPSIS
+	const sf::Vector2i& a_mousePosWin	- The current mouse position in x,y int
+											coordinates.
+
+DESCRIPTION
+	This function will determine if the user is interacting with the
+	TextureMenu and update variables accordingly that will affect rendering.
+
+AUTHOR
+	Austin Rafuls
+
+DATE
+	5:50pm 8/23/2019
+*/
+void gui::TextureMenu::Update(const sf::Vector2i& a_mousePosWin, const float & a_dt)
+{
+	UpdateKeyTimer(a_dt);
+	m_hideButton->Update(static_cast<sf::Vector2f>(a_mousePosWin));
+
+	if (m_hideButton->IsPressed() && GetKeyTimer())
+	{
+		m_hideMenu = !m_hideMenu;
+	}
+
+	// If TextureMenu is not hidden
+	if (!m_hideMenu)
+	{
+		// If mouse position is within TextureMenu
+		if (m_border.getGlobalBounds().contains(static_cast<sf::Vector2f>(a_mousePosWin)))
+		{
+			m_activeSelection = true;
+		}
+		else
+		{
+			m_activeSelection = false;
+		}
+
+		// If user is making a selection
+		if (IsActive())
+		{
+			// Determine user's current mouse location
+			m_mousePosGrid.x = (a_mousePosWin.x - static_cast<int>(m_border.getPosition().x)) / static_cast<unsigned int>(m_gridScale);
+			m_mousePosGrid.y = (a_mousePosWin.x - static_cast<int>(m_border.getPosition().y)) / static_cast<unsigned int>(m_gridScale);
+
+			// Update TextureMenu selection box to user's mouse position
+			m_selection.setPosition
+			(
+				m_border.getPosition().x + m_mousePosGrid.x * m_gridScale,
+				m_border.getPosition().y + m_mousePosGrid.y * m_gridScale
+			);
+		}
+
+		// Update Texture Rect
+		m_textureRect.left = static_cast<int>(m_selection.getPosition().x - m_border.getPosition().x);
+	}
+}
+
+
+/*
+NAME
+	void gui::TextureMenu::Render()
+
+SYNOPSIS
+	sf::RenderTarget & a_target	- The current window to draw on
+
+DESCRIPTION
+	This function will draw onto the window features of the TextureMenu onto
+	the screen.
+
+AUTHOR
+	Austin Rafuls
+
+DATE
+	5:20pm 8/23/2019
+*/
+void gui::TextureMenu::Render(sf::RenderTarget & a_target)
+{
+	m_hideButton->Render(a_target);
+
+	// If TextureMenu is not hidden
+	if (!m_hideMenu) 
+	{
+		a_target.draw(m_border);
+		a_target.draw(m_textureSheet);
+
+		// If user is trying to select a texture
+		if (IsActive())
+		{
+			// Draw selection box
+			// BUG -- This still does not draw properly so I have disabled it
+			//a_target.draw(m_selection);
 		}
 	}
 }

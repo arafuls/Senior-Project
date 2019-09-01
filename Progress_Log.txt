@@ -21,9 +21,11 @@ Progress
 
 
 
+ * PRIOR DATES SHOULD BE DOCUMENTED VIA EMAIL AND ANY MISSING REPORTS
+	ARE TO BE ASSUMED THAT NO PROGRESS WAS MADE DURING THAT PERIOD.
 
 
-7/16/2019
+July 14th, 2019 - July 20th, 2019
 Progress
  - Updated the Game class.
 	- Game class now has a deltatime clock to track how long it takes to update
@@ -48,7 +50,7 @@ Bugs/Issues
 
 
 
-7/30/2019
+July 21st, 2019 - July 27th, 2019
 Progress
  - Updated keybindings so that there is a list of supported keys available and
 	keybindings can easily be changed using those supported keys. They are also
@@ -74,7 +76,7 @@ Bugs/Issues
 
 
 
-8/1/2019
+July 28th, 2019 - August 3rd, 2019
 Progress
  - Added more main menu functionality.
 	- The New Game button can now push a new state onto the stack to start the
@@ -92,13 +94,6 @@ Progress
  - Updated the entity class to be more generic and allow for sprites and
 	textures.
 	- Created a Player class to utilize the Entity class.
-
-
-
-
-
-8/2/2019
-Progress
  - Updated player class.
 	- Can now load sprite images from local resources.
  - Created a movement component that will control how entities move within the
@@ -110,8 +105,8 @@ Progress
 
 
 
-
-8/5/2019
+	
+August 4th, 2019 - August 10th, 2019
 Progress
  - Updated entity movement.
 	- Sprites will now accelerate and decelerate with basic physics. 
@@ -120,15 +115,8 @@ Progress
 	- Added more customizability to buttons.
 		- Buttons now have changing text colors when idle, clicked, or hovered.
  - Created an animation class to start animating sprites.
- - Everything I wrote for the animation class broke the whole thing so now I
-	have to rewrite the whole animation class..
-
-
-
-
-
-8/7/2019
-Progress
+	- Everything I wrote for the animation class broke the whole thing so now I
+		have to rewrite the whole animation class..
  - Could not figure out how to animate sprites so I the animation class is now
 	deprecated. This way we at least have a pleasing sprite to look at.
  - Started implementing an editor mode to create a map and entities.
@@ -139,17 +127,6 @@ Progress
  - Updated player sprite so that it changes left and right accordingly with
 	movement.
  - Created a pause menu for when the user tries to escape during the game.
-
- Bugs/Issues
- - When calling the pause menu, it is called for every frame while holding
-	down Esc. This causes the pause menu to constantly flicker when pressed.
-
-
-
-
-
-8/8/2019
-Progress
  - Updated Pause Menu.
 	- Added and implemented a quit game button.
 	- Fixed the issue with the pause menu opening and closing too quickly by
@@ -161,19 +138,6 @@ Progress
  - Converted the Button class into a gui namespace instead.
 	- Created a DropDownList class within the gui:: namespace.
 	- Button class now allows for outlines when interacting.
-
- Bugs/Issues
- - Unable to center text on buttons in pause menu for some reason.
- - Overlapping buttons between main menu and settings causing you to click
-	buttons on the main menu when returning. Need to add a timer.
- - Changing resolution in settings is super buggy and cuts things off screen. 
-
-
-
-
-
-8/9/2019
-Progress
  - Started working on tiles and the world map.
 	- Created Tile class.
 	- Created WorldMap class.
@@ -198,14 +162,60 @@ Progress
 	of parameters made things ugly and confusion.
 	- This improves readability for all state related implementation.
 
-Bugs/Issues
+ Bugs/Issues
+ - When calling the pause menu, it is called for every frame while holding
+	down Esc. This causes the pause menu to constantly flicker when pressed.
+ - Unable to center text on buttons in pause menu for some reason.
+ - Overlapping buttons between main menu and settings causing you to click
+	buttons on the main menu when returning. Need to add a timer.
+ - Changing resolution in settings is super buggy and cuts things off screen. 
  - When adding a tile to the world map in the editor mode, the tile takes up a
 	seemingly random amount of tiles for some reason?
 
 
 
 
+	
+August 11th, 2019 - August 17th, 2019
+	- No progress was made during this time.
 
-8/?/2019
+
+
+
+
+August 18th, 2019 - August 24th, 2019
 Progress
- - 
+ - Updated Game Editor
+	- User can now also remove tiles from world map using right click.
+	- Fixed a bug where tiles were being creating at incorrect sizes due to
+		incorrect parameter passing order.
+	- Added textures so user can add grass textures to the floor.
+	- Added a "ghost texture" so you can see which texture is selected before
+		placing it onto the world map.
+	- User can now select their desired texture from a TextureMenu gui.
+	- Added a toggle button so the user can hide/show the TextureMenu as they
+		wish.
+	- Added a sidebar and moved the button onto there so that the user cannot
+		click the button to hide/show the TextureMenu and also paint onto the
+		world. Allows for a clean looking UI in case I want to add more 
+		buttons.
+ - Updated the gui namespace
+	- Created a new class, TextureMenu, that is displayed during the game
+		editor. It's purpose is to showcase all of the currently available
+		textures for the user to choose from.
+
+Bugs/Issues
+ - TextureMenu selection rectangle is not showing up in the proper locations,
+	but you can still select the desired texture when clicked.
+
+
+
+
+
+August 25th, 2019 - August 31st, 2019
+Progress
+ - Updated Game Editor
+	- User can now save the current world map that they create within the game
+		editor. It is serialized and saved with the game files.
+	- User can now load a previously saved world into the game editor.
+ - Started the 30 to 80 page documentation.

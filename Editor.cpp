@@ -2,10 +2,30 @@
 #include "Editor.h"
 
 
-// TODO: Documentation
+/*
+NAME
+	void Editor::InitSettings()
+
+DESCRIPTION
+	This function will initialize setting for the game editor upon 
+	instantiation.
+
+AUTHOR
+	Austin Rafuls
+
+DATE
+	4:46pm 8/23/2019
+*/
 void Editor::InitSettings()
 {
-
+	// Texture Rectangle to navigate texture sheet for the world.
+	m_textureRect = 
+		sf::IntRect(
+			0, 
+			0, 
+			static_cast<int>(m_stateData->m_worldGridSize), 
+			static_cast<int>(m_stateData->m_worldGridSize)
+		);
 }
 
 /*
@@ -76,21 +96,26 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	9:05pm 8/9/2019
+	2:44pm 8/23/2019
 */
 void Editor::InitGUI()
 {
-	/*
-	m_buttons["START_GAME"] = new Button(
-		80, 100, 250, 50,
-		&m_font, 26, "New Game",
-		sf::Color::White, sf::Color::Red, sf::Color::Transparent,
-		sf::Color(70, 70, 70, 200), sf::Color(150, 150, 150, 255), sf::Color(20, 20, 20, 150));
-	*/
+	//m_bar.setPosition
+	m_bar.setSize(sf::Vector2f(80.f, static_cast<float>(m_stateData->m_gfxSettings->GetVideoMode().height)));
+	m_bar.setFillColor(sf::Color(50, 50, 50, 100));
+	m_bar.setOutlineColor(sf::Color(200, 200, 200, 150));
+	m_bar.setOutlineThickness(1.f);
+
 	m_selectionRect.setSize(sf::Vector2f(m_stateData->m_worldGridSize, m_stateData->m_worldGridSize));
-	m_selectionRect.setFillColor(sf::Color::Transparent);
+	//m_selectionRect.setFillColor(sf::Color::Transparent);
+	m_selectionRect.setFillColor(sf::Color(255, 255, 255, 150));
 	m_selectionRect.setOutlineThickness(1.f);
 	m_selectionRect.setOutlineColor(sf::Color::Yellow);
+	m_selectionRect.setTexture(m_worldMap->GetTileTextures());
+	m_selectionRect.setTextureRect(m_textureRect);
+
+	// TODO: Make this not hardcoded.
+	m_textureMenu = new gui::TextureMenu(m_worldMap->GetTileTextures(), 100.f, 10.f, 900.f, 100.f, m_stateData->m_worldGridSize, m_font, "TOGGLE");
 }
 
 
@@ -106,11 +131,14 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	2:18pm 8/9/2019
+	7:12pm 8/28/2019
 */
 void Editor::InitPauseMenu()
 {
 	m_pauseMenu = new PauseMenu(*m_window, m_font);
+
+	m_pauseMenu->AddButton("LOAD_GAME", "Load World", 350.f);
+	m_pauseMenu->AddButton("SAVE_GAME", "Save World", 425.f);
 	m_pauseMenu->AddButton("EXIT_GAME", "Main Menu", 500.f);
 }
 
@@ -126,11 +154,14 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	8:42pm 8/9/2019
+	8:17pm 8/23/2019
 */
 void Editor::InitWorldMap()
 {
-	m_worldMap = new WorldMap(m_stateData->m_worldGridSize, 10, 10);
+	m_worldMap = new WorldMap(
+		m_stateData->m_worldGridSize, 
+		10, 10, 
+		"Resources/Images/World/textures1.png");
 }
 
 
@@ -141,8 +172,8 @@ Editor::Editor(StateDataContainer * a_stateData)
 	InitFonts();
 	InitKeybindings();
 	InitPauseMenu();
-	InitGUI();
 	InitWorldMap();
+	InitGUI();
 }
 
 
@@ -157,6 +188,7 @@ Editor::~Editor()
 
 	delete m_pauseMenu;
 	delete m_worldMap;
+	delete m_textureMenu;
 }
 
 
@@ -172,13 +204,23 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	2:24pm 8/9/2019
+	7:12pm 8/28/2019
 */
 void Editor::UpdatePauseGUI()
 {
 	if (m_pauseMenu->IsPressed("EXIT_GAME"))
 	{
 		EndState();
+	}
+
+	if (m_pauseMenu->IsPressed("SAVE_GAME"))
+	{
+		m_worldMap->SaveWorldMap("Test-Save.slmp");
+	}
+
+	if (m_pauseMenu->IsPressed("LOAD_GAME"))
+	{
+		m_worldMap->LoadWorldMap("Test-Save.slmp");
 	}
 }
 
@@ -195,9 +237,9 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	9:29pm 8/9/2019
+	5:49pm 8/23/2019
 */
-void Editor::UpdateGUI()
+void Editor::UpdateGUI(const float & a_dt)
 {
 	// Update Buttons
 	for (auto &button : m_buttons)
@@ -210,6 +252,16 @@ void Editor::UpdateGUI()
 		m_mousePosGrd.x * m_stateData->m_worldGridSize,
 		m_mousePosGrd.y * m_stateData->m_worldGridSize
 	);
+
+	// Update texture selection menu
+	m_textureMenu->Update(m_mousePosWin, a_dt);
+
+	// Update texture selection rect _IF_ active
+	if (m_textureMenu->IsActive())
+	{
+		m_selectionRect.setTextureRect(m_textureRect);
+		m_selectionRect.setPosition(m_mousePosGrd.x * m_stateData->m_worldGridSize, m_mousePosGrd.y * m_stateData->m_worldGridSize);
+	}
 }
 
 
@@ -228,7 +280,7 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	9:34pm 8/9/2019
+	5:49pm 8/23/2019
 */
 void Editor::Update(const float& a_dt)
 {
@@ -245,7 +297,7 @@ void Editor::Update(const float& a_dt)
 	else
 	{
 		// Unpaused
-		UpdateGUI();
+		UpdateGUI(a_dt);
 		UpdateEditorKeys(a_dt);
 	}
 }
@@ -262,7 +314,7 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	9:10pm 8/9/2019
+	6:32pm 8/23/2019
 */
 void Editor::RenderGUI(sf::RenderTarget & a_target)
 {
@@ -272,14 +324,24 @@ void Editor::RenderGUI(sf::RenderTarget & a_target)
 		button.second->Render(a_target);
 	}
 
-	// Draw selection rectangle
-	a_target.draw(m_selectionRect);	
+	// Draw texture selection menu
+	m_textureMenu->Render(a_target);
+
+	// If TextureMenu is inactive
+	if (!m_textureMenu->IsActive() && !m_bar.getGlobalBounds().contains(sf::Vector2f(m_mousePosWin)))
+	{	
+		// Draw selection rectangle
+		a_target.draw(m_selectionRect);
+	}
+
+	// Draw sidebar
+	a_target.draw(m_bar);
 }
 
 
 /*
 NAME
-	void Editor::Render(sf::RenderTarget* a_target)
+	void Editor::Render()
 
 SYNOPSIS
 	sf::RenderTarget* a_target	- The current window to draw to.
@@ -292,7 +354,7 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	8:42pm 8/9/2019
+	2:26pm 8/23/2019
 */
 void Editor::Render(sf::RenderTarget* a_target)
 {
@@ -314,20 +376,20 @@ void Editor::Render(sf::RenderTarget* a_target)
 	}
 
 	// DEBUG -- REMOVE LATER
-	sf::Text mt;
-	mt.setPosition(m_mousePosCam.x - 2.f, m_mousePosCam.y - 15.f);
-	mt.setFont(m_font);
-	mt.setCharacterSize(12);
-	std::stringstream ss;
-	ss << m_mousePosCam.x << " " << m_mousePosCam.y;
-	mt.setString(ss.str());
-	a_target->draw(mt);
+	//sf::Text mt;
+	//mt.setPosition(m_mousePosCam.x - 2.f, m_mousePosCam.y - 15.f);
+	//mt.setFont(m_font);
+	//mt.setCharacterSize(12);
+	//std::stringstream ss;
+	//ss << m_mousePosCam.x << " " << m_mousePosCam.y;
+	//mt.setString(ss.str());
+	//a_target->draw(mt);
 }
 
 
 /*
 NAME
-	void Editor::UpdateKeys(const float & a_dt)
+	void Editor::UpdateKeys()
 
 SYNOPSIS
 	const float & a_dt	- Deltatime
@@ -374,13 +436,40 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	10:06pm 8/9/2019
+	6:25pm 8/23/2019
 */
 void Editor::UpdateEditorKeys(const float & a_dt)
 {
-	// Add Tile to World
+	// Adding/Removing Tiles to World
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && GetInputTimer())
 	{
-		m_worldMap->AddTile(m_mousePosGrd.x, m_mousePosGrd.y, 0);
+		// If mouse is not within side bar
+		if (!m_bar.getGlobalBounds().contains(sf::Vector2f(m_mousePosWin)))
+		{
+			if (!m_textureMenu->IsActive())
+			{
+				// Add tile
+				m_worldMap->AddTile(m_mousePosGrd.x, m_mousePosGrd.y, 0, m_textureRect);
+			}
+			else
+			{
+				// Select tile
+				m_textureRect = m_textureMenu->GetTextureRect();
+			}
+		}
 	}
+	else if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && GetInputTimer())
+	{
+		// If mouse is not within side bar
+		if (!m_bar.getGlobalBounds().contains(sf::Vector2f(m_mousePosWin)))
+		{
+			if (!m_textureMenu->IsActive())
+			{
+				// Remove tile
+				m_worldMap->RemoveTile(m_mousePosGrd.x, m_mousePosGrd.y, 0);
+			}
+		}
+	}
+
+
 }

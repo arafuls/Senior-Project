@@ -83,5 +83,41 @@ namespace gui
 		void Render(sf::RenderTarget & a_target);
 
 	};
+
+	class TextureMenu
+	{
+	private:
+		sf::RectangleShape m_border;
+		sf::RectangleShape m_selection;
+		sf::Vector2u m_mousePosGrid;
+		sf::Sprite m_textureSheet;
+		sf::IntRect m_textureRect;
+		float m_gridScale;
+		bool m_activeSelection;
+
+		float m_timer;
+		const float m_timerMax;
+
+		gui::Button* m_hideButton;
+		bool m_hideMenu;
+
+	public:
+		TextureMenu(
+			sf::Texture* a_textureSheet, 
+			float a_x, float a_y, 
+			float a_width, float a_height, 
+			float a_gridScale,
+			sf::Font& a_font, std::string a_text
+		);
+		~TextureMenu();
+
+		const bool& IsActive() const;
+		const bool GetKeyTimer();
+		const sf::IntRect& GetTextureRect() const;
+		void UpdateKeyTimer(const float & a_dt);
+
+		void Update(const sf::Vector2i& a_mousePosWin, const float & a_dt);
+		void Render(sf::RenderTarget& a_target);
+	};
 }
 

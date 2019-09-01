@@ -10,9 +10,13 @@ class Editor :
 private:
 	WorldMap* m_worldMap;
 	PauseMenu * m_pauseMenu;
-	sf::Font m_font;
 	std::map<std::string, gui::Button*> m_buttons;
+	gui::TextureMenu* m_textureMenu;
+
+	sf::Font m_font;
 	sf::RectangleShape m_selectionRect;
+	sf::IntRect m_textureRect;
+	sf::RectangleShape m_bar;
 
 	void InitSettings();
 	void InitFonts();
@@ -26,7 +30,7 @@ public:
 	virtual ~Editor();
 
 	void Update(const float& a_dt);
-	void UpdateGUI();
+	void UpdateGUI(const float & a_dt);
 	void UpdatePauseGUI();
 	void UpdateKeys(const float& a_dt);
 	void UpdateEditorKeys(const float& a_dt);

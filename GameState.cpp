@@ -139,11 +139,15 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	8:52pm 8/9/2019
+	8:28pm 8/23/2019
 */
 void GameState::InitWorldMap()
 {
-	m_worldMap = new WorldMap(m_stateData->m_worldGridSize, 10, 10);
+	m_worldMap = new WorldMap(
+		m_stateData->m_worldGridSize, 
+		10, 10, 
+		"Resources/Images/World/textures1.png"
+	);
 }
 
 
@@ -308,7 +312,7 @@ DATE
 */
 void GameState::UpdateKeys(const float & a_dt)
 {
-	// Quit Key
+	// Pause Menu Key during gameplay
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(m_keybindings.at("CLOSE"))) && GetInputTimer())
 	{
 		if (m_pause == false)

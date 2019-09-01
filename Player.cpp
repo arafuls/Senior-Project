@@ -2,13 +2,13 @@
 #include "Player.h"
 
 
-// TODO: Documentation
+
 void Player::InitSettings()
 {
 }
 
 
-// TODO: Documentation
+
 void Player::InitComp()
 {
 }

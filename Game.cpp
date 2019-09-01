@@ -24,8 +24,7 @@ DATE
 void Game::InitSettings()
 {
 	m_window = NULL;
-	//m_dt = 0.f;
-	m_worldGridSize = 50.f;
+	m_worldGridSize = 100.f;
 }
 
 
@@ -151,7 +150,20 @@ void Game::InitStates()
 }
 
 
-// TODO: Documentation completed 7:01pm 8/9/2019
+/*
+NAME
+	void Game::InitStateData()
+
+DESCRIPTION
+	This function will initialize game data into a StateDataContainer object
+	for the benefit of readability.
+
+AUTHOR
+	Austin Rafuls
+
+DATE
+	7:01pm 8/9/2019
+*/
 void Game::InitStateData()
 {
 	m_stateData.m_window = m_window;
@@ -262,7 +274,7 @@ void Game::Update()
 		// If state is requesting to be terminated
 		if (m_states.top()->GetExitRequest())
 		{
-			// Serialization
+			// Terminate top state
 			m_states.top()->EndState();
 
 			// Delete the state and remove it from the stack

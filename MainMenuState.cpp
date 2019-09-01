@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MainMenuState.h"
 
-// TODO: Documentation
+
 void MainMenuState::InitSettings()
 {
 

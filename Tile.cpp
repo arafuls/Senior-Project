@@ -5,23 +5,62 @@
 
 Tile::Tile()
 {
+	m_tileType = 0;
+	m_tileCollision = false;
 }
 
-Tile::Tile(float a_gridSize, float a_x, float a_y)
+
+
+Tile::Tile(unsigned int a_x, unsigned int a_y, float a_gridSize, sf::Texture& a_texture, sf::IntRect a_textureRect, short a_tileType, bool a_tileCollision)
 {
-	m_tile.setPosition(a_x, a_y);
+	m_tile.setPosition(a_x * a_gridSize, a_y * a_gridSize);
 	m_tile.setSize(sf::Vector2f(a_gridSize, a_gridSize));
-	
-	// DEBUG -- REMOVE LATER
-	m_tile.setFillColor(sf::Color::Green);
-	m_tile.setOutlineThickness(1.f);
-	m_tile.setOutlineColor(sf::Color::Red);
+	m_tile.setTexture(&a_texture);
+	m_tile.setTextureRect(a_textureRect);
+	m_tileType = a_tileType;
+	m_tileCollision = a_tileCollision;
+
+	// Outline Demo
+	//m_tile.setFillColor(sf::Color::Green);
+	//m_tile.setOutlineThickness(1.f);
+	//m_tile.setOutlineColor(sf::Color::Red);
 }
 
 
 
 Tile::~Tile()
 {
+}
+
+
+/*
+NAME
+	const std::string Tile::GetAsString() const
+
+DESCRIPTION
+	This function will return the current tile as serialized data.
+
+	Note: Does not end with any padding!
+
+RETURNS
+	Returns a const std::string containing all of the tile data.
+
+AUTHOR
+	Austin Rafuls
+
+DATE
+	8:42pm 8/23/2019
+*/
+const std::string Tile::GetAsString() const
+{
+	std::stringstream ss;
+
+	ss << m_tile.getTextureRect().left << " "
+		<< m_tile.getTextureRect().top << " "
+		<< m_tileCollision << " "
+		<< m_tileType;
+
+	return ss.str();
 }
 
 
