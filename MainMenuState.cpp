@@ -323,7 +323,7 @@ SYNOPSIS
 	const float & a_dt	- Deltatime
 
 DESCRIPTION
-	This function will check to see if an exit request was called by the user.
+	Deprecated
 
 AUTHOR
 	Austin Rafuls

@@ -139,7 +139,7 @@ AUTHOR
 	Austin Rafuls
 
 DATE
-	8:28pm 8/23/2019
+	11:05pm 9/2/2019
 */
 void GameState::InitWorldMap()
 {
@@ -148,6 +148,12 @@ void GameState::InitWorldMap()
 		10, 10, 
 		"Resources/Images/World/textures1.png"
 	);
+	
+	// Load world if there is a previous save
+	if (!m_worldMap->LoadWorldMap("Test-Save.slmp"))
+	{
+		std::cout << "WARNING: Couldn't find saved world to load!" << std::endl;
+	}
 }
 
 
@@ -155,10 +161,10 @@ GameState::GameState(StateDataContainer * a_stateData)
 	: State(a_stateData)
 {
 	InitKeybindings();
+	InitFont();
 	InitPauseMenu();
 	InitTextures();
 	InitPlayer();
-	InitFont();
 	InitWorldMap();
 }
 
@@ -235,7 +241,7 @@ void GameState::Render(sf::RenderTarget * a_target)
 	}
 
 	// Render the world textures
-	//m_worldMap.Render(*a_target);
+	m_worldMap->Render(*a_target);
 
 	m_player->Render(* m_window);
 

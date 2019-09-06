@@ -399,7 +399,7 @@ NAME
 	const unsigned int & gui::DropDownList::GetActiveElementIdentifier() const
 
 DESCRIPTION
-	This function fetch and return the last known identifier for the active.
+	This function fetches and returns the last known identifier for the active.
 	element. This is used as the index from the last selection made from a
 	selected dropdownlist item.
 

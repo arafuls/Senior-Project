@@ -24,7 +24,7 @@ public:
 	void RemoveTile(const unsigned int a_x, const unsigned int a_y, const unsigned int a_z);
 
 	void SaveWorldMap(const std::string a_file);
-	void LoadWorldMap(const std::string a_file);
+	bool LoadWorldMap(const std::string a_file);
 
 	void Update();
 	void Render(sf::RenderTarget & a_target);

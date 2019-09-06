@@ -100,12 +100,13 @@ DATE
 */
 void Editor::InitGUI()
 {
-	//m_bar.setPosition
+	// Sidebar
 	m_bar.setSize(sf::Vector2f(80.f, static_cast<float>(m_stateData->m_gfxSettings->GetVideoMode().height)));
 	m_bar.setFillColor(sf::Color(50, 50, 50, 100));
 	m_bar.setOutlineColor(sf::Color(200, 200, 200, 150));
 	m_bar.setOutlineThickness(1.f);
 
+	// Selection Rectangle
 	m_selectionRect.setSize(sf::Vector2f(m_stateData->m_worldGridSize, m_stateData->m_worldGridSize));
 	//m_selectionRect.setFillColor(sf::Color::Transparent);
 	m_selectionRect.setFillColor(sf::Color(255, 255, 255, 150));
@@ -114,6 +115,7 @@ void Editor::InitGUI()
 	m_selectionRect.setTexture(m_worldMap->GetTileTextures());
 	m_selectionRect.setTextureRect(m_textureRect);
 
+	// Texture Selection Menu
 	// TODO: Make this not hardcoded.
 	m_textureMenu = new gui::TextureMenu(m_worldMap->GetTileTextures(), 100.f, 10.f, 900.f, 100.f, m_stateData->m_worldGridSize, m_font, "TOGGLE");
 }
@@ -135,8 +137,10 @@ DATE
 */
 void Editor::InitPauseMenu()
 {
+	// Conjure the Pause Menu
 	m_pauseMenu = new PauseMenu(*m_window, m_font);
 
+	// Add buttons to it
 	m_pauseMenu->AddButton("LOAD_GAME", "Load World", 350.f);
 	m_pauseMenu->AddButton("SAVE_GAME", "Save World", 425.f);
 	m_pauseMenu->AddButton("EXIT_GAME", "Main Menu", 500.f);

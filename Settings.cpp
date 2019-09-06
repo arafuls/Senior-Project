@@ -236,8 +236,6 @@ void Settings::UpdateGUI(const float& a_dt)
 	// Save button functionality
 	if (m_buttons["SAVE_CHANGES"]->IsPressed())
 	{
-		// DEBUG -- REMOVE LATER
-
 		// Save current resolution
 		m_stateData->m_gfxSettings->SetResolution(
 			m_videoModes[m_dropdownlists["RESOLUTION"]->GetActiveElementIdentifier()]);
@@ -256,9 +254,6 @@ void Settings::UpdateGUI(const float& a_dt)
 	{
 		item.second->Update(m_mousePosCam, a_dt);
 	}
-
-	// Dropdownlist item functionality
-
 }
 
 

@@ -271,13 +271,16 @@ SYNOPSIS
 DESCRIPTION
 	This function will load the WorldMap from a saved text file.
 
+RETURNS
+	A boolean value representing of the file was successfully loaded or not.
+
 AUTHOR
 	Austin Rafuls
 
 DATE
-	6:39pm 8/28/2019
+	11:05pm 9/2/2019
 */
-void WorldMap::LoadWorldMap(const std::string a_file)
+bool WorldMap::LoadWorldMap(const std::string a_file)
 {
 	std::ifstream ifile;
 	ifile.open(a_file);
@@ -339,10 +342,13 @@ void WorldMap::LoadWorldMap(const std::string a_file)
 					tileCollision
 				);
 		}
+
+		return true;
 	}
 	else
 	{
-		throw("ERROR: Could not open save file target for reading!");
+		//throw("ERROR: Could not open save file target for reading!");
+		return false;
 	}
 }
 

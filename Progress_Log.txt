@@ -218,4 +218,14 @@ Progress
 	- User can now save the current world map that they create within the game
 		editor. It is serialized and saved with the game files.
 	- User can now load a previously saved world into the game editor.
- - Started the 30 to 80 page documentation.
+ - Started the 30 to 80 page documentation pdf.
+
+
+
+
+
+September 1st, 2019 - September 7th, 2019
+Progress
+ - Updated GameState
+	- User can now play the game on a previously saved world map.
+ - Continued working on documentation pdf.
