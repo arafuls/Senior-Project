@@ -40,13 +40,13 @@ For a more in-depth view of the SFML Game Engine, you are encouraged to read thi
 When within the main menu and settings state, all you can do is click on buttons. No other inputs are to be recognized by the program.
 
 When within the game state, you can use the following keybindings accordingly by default unless a configuration file has been changed:
-•	W: Moves the player sprite up.
-•	A: Moves the player sprite left.
-•	S: Moves the player sprite down.
-•	D: Moves the player sprite right.
-•	Escape: Toggles the pause menu.
+* W: Moves the player sprite up.
+* A: Moves the player sprite left.
+* S: Moves the player sprite down.
+* D: Moves the player sprite right.
+* Escape: Toggles the pause menu.
 
 When within the editor state, you can use the following keybindings accordingly by default unless a configuration file has been changed:
-•	Left Mouse Button: Selects a texture from the texture menu or paints the selected tile with the most recently selected texture if the tile is not already painted.
-•	Right Mouse Button: Removes a texture from an already painted tile if selected.
-•	Escape: Toggles the pause menu.
+* Left Mouse Button: Selects a texture from the texture menu or paints the selected tile with the most recently selected texture if the tile is not already painted.
+* Right Mouse Button: Removes a texture from an already painted tile if selected.
+* Escape: Toggles the pause menu.
